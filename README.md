@@ -9,4 +9,4 @@ Lektion 2
 installerade drupal 11 och fick igång min sida.
 
 Lektion 3
-Installerade alla theman och moduler som jag kommer behöva till min projekt.
+Installerade alla teman och moduler som jag kommer behöva till min projekt.
