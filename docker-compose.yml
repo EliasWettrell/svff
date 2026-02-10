@@ -1,0 +1,79 @@
+#----------------------------------------------------------------------#  
+#                                                                      #  
+#  ██████████                                            ████          #  
+# ░░███░░░░███                                          ░░███          #  
+#  ░███   ░░███ ████████  █████ ████ ████████   ██████   ░███          #  
+#  ░███    ░███░░███░░███░░███ ░███ ░░███░░███ ░░░░░███  ░███          #  
+#  ░███    ░███ ░███ ░░░  ░███ ░███  ░███ ░███  ███████  ░███          #  
+#  ░███    ███  ░███      ░███ ░███  ░███ ░███ ███░░███  ░███          #  
+#  ██████████   █████     ░░████████ ░███████ ░░████████ █████         #  
+# ░░░░░░░░░░   ░░░░░       ░░░░░░░░  ░███░░░   ░░░░░░░░ ░░░░░          #  
+#                                    ░███                              #  
+#                                   sudo █████                             #  
+#                                   ░░░░░                              #   
+#----------------------------------------------------------------------#  
+# 
+# A docker-compose file for installing Drupal, MariaDB and Adminer  
+# 
+# IMPORTANT!
+#
+# 1) 
+# Change XX to the version of Drupal you need  
+# (ie: 11 for Drupal 11 and 8 for Drupal 8)  
+# 
+# 2) 
+# Change PROJECT_NAME to the name of the project you are initiating  
+# 
+# 3) 
+# Change the login details for the SQL database  
+#
+# 4) 
+# Create the folders "themes" and "modules" in your project directory  
+# 
+# 5) 
+# Now you can initiate the file with  
+# docker compose up -d 
+# 
+# 
+# Access via "http://localhost:8080" and the local  
+# directories ./themes and ./modules  
+#
+
+services:
+
+  drupal:
+    image: drupal:11-apache
+    container_name: drupal-svff
+    ports:
+      - "8080:80"
+    restart: always
+    volumes:
+      - type: bind
+        source: ./themes
+        target: /var/www/html/themes
+      - type: bind
+        source: ./modules
+        target: /var/www/html/modules
+
+  adminer:
+    container_name: adminer-svff
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb-svff
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb-svff
+    stop_grace_period: 30s
+    working_dir: /host
+    volumes:
+      - ./db:/host
+    environment:
+      - MYSQL_ROOT_PASSWORD=Smulan123!
+      - MYSQL_DATABASE=svff
+      - MYSQL_USER=Graham Potter
+      - MYSQL_PASSWORD=Smulan123!
+    restart: always
